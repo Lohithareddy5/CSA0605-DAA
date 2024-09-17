@@ -1,0 +1,39 @@
+def is_hamiltonian_cycle(edges, n):
+    from itertools import permutations
+
+    # Create adjacency list
+    graph = {i: [] for i in range(n)}
+    for u, v in edges:
+        graph[u].append(v)
+        graph[v].append(u)
+
+    # Check all permutations of vertices
+    for perm in permutations(range(n)):
+        if all(perm[i] in graph[perm[i - 1]] for i in range(n)):
+            return True
+    return False
+
+# Example usage
+edges = [(0, 1), (1, 2), (2, 3), (3, 0), (0, 2)]
+n = 4
+print(is_hamiltonian_cycle(edges, n))  # Output: True
+
+25)
+
+# Generate all subsets of a given set S in lexicographical order
+
+def subsets(S):
+    S = sorted(set(S))  # Remove duplicates and sort
+    result = []
+    
+    def backtrack(start, path):
+        result.append(path)
+        for i in range(start, len(S)):
+            backtrack(i + 1, path + [S[i]])
+    
+    backtrack(0, [])
+    return result
+
+# Example usage
+A = [1, 2, 3]
+print(subsets(A))
