@@ -1,0 +1,47 @@
+import sys
+
+def prim_mst(graph):
+    num_vertices = len(graph)
+    selected = [False] * num_vertices
+    edge_count = 0
+    selected[0] = True  # Start from the first vertex
+    result = []  # To store the resulting edges
+    total_cost = 0
+
+    while edge_count < num_vertices - 1:
+        minimum = sys.maxsize
+        a = -1
+        b = -1
+
+        for m in range(num_vertices):
+            if selected[m]:
+                for n in range(num_vertices):
+                    if not selected[n] and graph[m][n]:  # Check for an edge
+                        if minimum > graph[m][n]:
+                            minimum = graph[m][n]
+                            a = m
+                            b = n
+
+        selected[b] = True
+        result.append((a, b, graph[a][b]))
+        total_cost += graph[a][b]
+        edge_count += 1
+
+    return result, total_cost
+
+# Example graph represented as an adjacency matrix
+graph = [
+    [0, 2, 0, 6, 0],
+    [2, 0, 3, 8, 5],
+    [0, 3, 0, 0, 7],
+    [6, 8, 0, 0, 9],
+    [0, 5, 7, 9, 0]
+]
+
+mst_edges, total_cost = prim_mst(graph)
+
+print("Edges in the Minimum Spanning Tree:")
+for edge in mst_edges:
+    print(f"Edge: {edge[0]} - {edge[1]}, Cost: {edge[2]}")
+
+print("Total cost of the Minimum Spanning Tree:", total_cost)
