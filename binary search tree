@@ -1,0 +1,55 @@
+def optimal_bst(keys, freq):
+    n = len(keys)
+    
+    # Cost table and root table
+    cost = [[0 for _ in range(n + 1)] for _ in range(n + 1)]
+    root = [[0 for _ in range(n + 1)] for _ in range(n + 1)]
+    
+    # Initialize the cost for the single keys
+    for i in range(n):
+        cost[i][i + 1] = freq[i]
+        root[i][i + 1] = i + 1
+    
+    # Calculate the cost for larger trees
+    for length in range(2, n + 1):  # length of the subtree
+        for i in range(n - length + 1):
+            j = i + length
+            cost[i][j] = float('inf')
+            sum_freq = sum(freq[i:j])  # Sum frequencies for keys from i to j-1
+            for r in range(i + 1, j + 1):
+                c = cost[i][r - 1] + cost[r][j] + sum_freq
+                if c < cost[i][j]:
+                    cost[i][j] = c
+                    root[i][j] = r
+    
+    # The result is the cost of the optimal BST
+    return cost[0][n], cost, root
+
+def print_cost_and_root(cost, root):
+    print("Cost Table:")
+    for row in cost:
+        print('\t'.join(map(str, row)))
+    
+    print("\nRoot Table:")
+    for row in root:
+        print('\t'.join(map(str, row)))
+
+# Test the implementation
+keys = [10, 12, 16, 21]
+frequencies = [4, 2, 6, 3]
+
+cost, cost_table, root_table = optimal_bst(keys, frequencies)
+
+print(f"Optimal Cost: {cost}")
+print_cost_and_root(cost_table, root_table)
+
+# Additional Test Cases
+test_case_1_keys = [10, 12]
+test_case_1_freq = [34, 50]
+cost1, cost_table1, root_table1 = optimal_bst(test_case_1_keys, test_case_1_freq)
+print(f"\nTest Case 1 - Optimal Cost: {cost1}")
+
+test_case_2_keys = [10, 12, 20]
+test_case_2_freq = [34, 8, 50]
+cost2, cost_table2, root_table2 = optimal_bst(test_case_2_keys, test_case_2_freq)
+print(f"Test Case 2 - Optimal Cost: {cost2}")
