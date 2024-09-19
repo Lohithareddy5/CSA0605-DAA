@@ -1,0 +1,29 @@
+def solve_n_queens_rectangular(rows, cols, num_queens):
+    board = [['.' for _ in range(cols)] for _ in range(rows)]
+
+    def is_safe(row, col):
+        for i in range(row):
+            if board[i][col] == 'Q':
+                return False
+        for i, j in zip(range(row, -1, -1), range(col, -1, -1)):
+            if j >= 0 and board[i][j] == 'Q':
+                return False
+        for i, j in zip(range(row, -1, -1), range(col, cols)):
+            if j < cols and board[i][j] == 'Q':
+                return False
+        return True
+
+    def solve_util(row):
+        if row == num_queens:
+            print_board(board)
+            return
+        for col in range(cols):
+            if is_safe(row, col):
+                board[row][col] = 'Q'
+                solve_util(row + 1)
+                board[row][col] = '.'
+
+    solve_util(0)
+
+# Example usage for an 8x10 board with 8 queens
+solve_n_queens_rectangular(8, 10, 8)
