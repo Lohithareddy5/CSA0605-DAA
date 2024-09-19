@@ -1,0 +1,27 @@
+def binary_search(arr, key):
+    low = 0
+    high = len(arr) - 1
+    comparisons = 0
+    
+    while low <= high:
+        comparisons += 1
+        mid = (low + high) // 2
+        
+        # Show mid-point calculation
+        print(f"Comparing against mid-point index {mid} with value {arr[mid]}")
+        
+        if arr[mid] == key:
+            return mid, comparisons
+        elif arr[mid] < key:
+            low = mid + 1
+        else:
+            high = mid - 1
+            
+    return -1, comparisons  # Key not found
+
+# Test the function with the provided input
+sorted_array = [3, 9, 14, 19, 25, 31, 42, 47, 53]
+search_key = 31
+index, num_comparisons = binary_search(sorted_array, search_key)
+
+print(f"Output: {index}, Comparisons: {num_comparisons}")
