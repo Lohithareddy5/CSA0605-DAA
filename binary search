@@ -1,0 +1,37 @@
+def binary_search(arr, key):
+    low, high = 0, len(arr) - 1
+    comparisons = 0
+    
+    while low <= high:
+        mid = (low + high) // 2
+        comparisons += 1
+        
+        # Check if the key is present at mid
+        if arr[mid] == key:
+            return mid, comparisons  # Return index and comparison count
+        # If the key is greater, ignore the left half
+        elif arr[mid] < key:
+            low = mid + 1
+        # If the key is smaller, ignore the right half
+        else:
+            high = mid - 1
+    
+    return -1, comparisons  # Key not found
+
+# Function to test the binary search and display results
+def test_binary_search(arr, key):
+    index, comparisons = binary_search(arr, key)
+    if index != -1:
+        print(f"Element {key} found at index: {index}, Comparisons made: {comparisons}")
+    else:
+        print(f"Element {key} not found, Comparisons made: {comparisons}")
+
+# Test cases
+print("Test Case 1:")
+test_binary_search([5, 10, 15, 20, 25, 30, 35, 40, 45], 20)
+
+print("\nTest Case 2:")
+test_binary_search([10, 20, 30, 40, 50, 60], 50)
+
+print("\nTest Case 3:")
+test_binary_search([21, 32, 40, 54, 65, 76, 87], 32)
