@@ -1,0 +1,40 @@
+class Node:
+    def _init_(self, char, freq):
+        self.char = char
+        self.freq = freq
+        self.left = None
+        self.right = None
+
+def build_huffman_tree(characters, frequencies):
+    nodes = [Node(char, freq) for char, freq in zip(characters, frequencies)]
+    
+    while len(nodes) > 1:
+        nodes = sorted(nodes, key=lambda x: x.freq)
+        left = nodes[0]
+        right = nodes[1]
+        merged = Node(None, left.freq + right.freq)
+        merged.left = left
+        merged.right = right
+        nodes = nodes[2:] + [merged]
+    
+    return nodes[0]
+
+def generate_codes(node, current_code="", codes={}):
+    if node is not None:
+        if node.char is not None:
+            codes[node.char] = current_code
+        generate_codes(node.left, current_code + "0", codes)
+        generate_codes(node.right, current_code + "1", codes)
+    return codes
+
+def huffman_codes(characters, frequencies):
+    root = build_huffman_tree(characters, frequencies)
+    codes = generate_codes(root)
+    return sorted(codes.items(), key=lambda x: characters.index(x[0]))
+
+# Test Case 1
+n = 4
+characters = ['a', 'b', 'c', 'd']
+frequencies = [5, 9, 12, 13]
+output = huffman_codes(characters, frequencies)
+print(output)
