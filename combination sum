@@ -1,0 +1,30 @@
+def combination_sum(candidates, target):
+    def backtrack(remaining, combination, start):
+        if remaining == 0:  # Found a valid combination
+            result.append(list(combination))
+            return
+        elif remaining < 0:  # Exceeded the target
+            return
+        
+        for i in range(start, len(candidates)):
+            # Include the candidate[i] and continue the search
+            combination.append(candidates[i])
+            backtrack(remaining - candidates[i], combination, i)  # Not i + 1 because we can reuse the same element
+            combination.pop()  # Backtrack
+
+    result = []
+    backtrack(target, [], 0)
+    return result
+
+# Example test cases
+candidates1 = [2, 3, 6, 7]
+target1 = 7
+print("Example 1 Output:", combination_sum(candidates1, target1))
+
+candidates2 = [2, 3, 5]
+target2 = 8
+print("Example 2 Output:", combination_sum(candidates2, target2))
+
+candidates3 = [2]
+target3 = 1
+print("Example 3 Output:", combination_sum(candidates3, target3))
