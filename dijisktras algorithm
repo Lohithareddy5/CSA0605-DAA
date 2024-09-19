@@ -1,0 +1,40 @@
+def dijkstra(n, edges, source, target):
+    graph = {i: [] for i in range(n)}
+    for u, v, w in edges:
+        graph[u].append((v, w))
+        graph[v].append((u, w))
+
+    distances = {i: float('inf') for i in range(n)}
+    distances[source] = 0
+    visited = {i: False for i in range(n)}
+
+    for _ in range(n):
+        min_distance = float('inf')
+        min_vertex = -1
+        
+        for vertex in range(n):
+            if not visited[vertex] and distances[vertex] < min_distance:
+                min_distance = distances[vertex]
+                min_vertex = vertex
+
+        if min_vertex == -1:
+            break
+
+        visited[min_vertex] = True
+
+        for neighbor, weight in graph[min_vertex]:
+            if not visited[neighbor]:
+                new_distance = distances[min_vertex] + weight
+                if new_distance < distances[neighbor]:
+                    distances[neighbor] = new_distance
+
+    return distances[target]
+
+# Test Case 1
+n = 6
+edges = [(0, 1, 7), (0, 2, 9), (0, 5, 14), (1, 2, 10), (1, 3, 15),
+         (2, 3, 11), (2, 5, 2), (3, 4, 6), (4, 5, 9)]
+source = 0
+target = 4
+output = dijkstra(n, edges, source, target)
+print(output)  # Output: 20
