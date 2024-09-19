@@ -1,0 +1,29 @@
+def permuteUnique(nums):
+    def backtrack(start):
+        if start == len(nums):
+            result.append(list(nums))
+            return
+        
+        for i in range(start, len(nums)):
+            # Skip duplicates
+            if i > start and nums[i] == nums[start]:
+                continue
+            
+            # Swap the current element with the starting element
+            nums[start], nums[i] = nums[i], nums[start]
+            # Recurse with the next element as the start
+            backtrack(start + 1)
+            # Swap back to restore the original array
+            nums[start], nums[i] = nums[i], nums[start]
+
+    nums.sort()  # Sort the array to facilitate duplicate skipping
+    result = []
+    backtrack(0)
+    return result
+
+# Example test cases
+nums1 = [1, 1, 2]
+print("Example 1 Output:", permuteUnique(nums1))
+
+nums2 = [1, 2, 3]
+print("Example 2 Output:", permuteUnique(nums2))
