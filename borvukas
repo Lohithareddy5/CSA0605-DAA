@@ -1,0 +1,73 @@
+class DisjointSet:
+    def __init__(self, n):
+        self.parent = list(range(n))
+        self.rank = [0] * n
+
+    def find(self, u):
+        if self.parent[u] != u:
+            self.parent[u] = self.find(self.parent[u])  # Path compression
+        return self.parent[u]
+
+    def union(self, u, v):
+        root_u = self.find(u)
+        root_v = self.find(v)
+
+        if root_u != root_v:
+            if self.rank[root_u] > self.rank[root_v]:
+                self.parent[root_v] = root_u
+            elif self.rank[root_u] < self.rank[root_v]:
+                self.parent[root_u] = root_v
+            else:
+                self.parent[root_v] = root_u
+                self.rank[root_u] += 1
+
+def boruvka_mst(edges, num_vertices):
+    ds = DisjointSet(num_vertices)
+    num_trees = num_vertices
+    mst_edges = []
+    total_cost = 0
+
+    while num_trees > 1:
+        # Create a list to store the cheapest edge for each component
+        cheapest = [None] * num_vertices
+        
+        # Find the cheapest edge for each tree
+        for u, v, weight in edges:
+            set_u = ds.find(u)
+            set_v = ds.find(v)
+
+            if set_u != set_v:  # Only consider edges between different sets
+                if cheapest[set_u] is None or cheapest[set_u][2] > weight:
+                    cheapest[set_u] = (u, v, weight)
+                if cheapest[set_v] is None or cheapest[set_v][2] > weight:
+                    cheapest[set_v] = (u, v, weight)
+
+        # Add the cheapest edges to the MST
+        for i in range(num_vertices):
+            if cheapest[i] is not None:
+                u, v, weight = cheapest[i]
+                if ds.find(u) != ds.find(v):  # If they are in different sets
+                    ds.union(u, v)
+                    mst_edges.append((u, v, weight))
+                    total_cost += weight
+                    num_trees -= 1  # Reduce the number of trees
+
+    return mst_edges, total_cost
+
+# Example graph represented as an edge list (u, v, weight)
+edges = [
+    (0, 1, 10),
+    (0, 2, 6),
+    (0, 3, 5),
+    (1, 3, 15),
+    (2, 3, 4)
+]
+
+num_vertices = 4
+mst_edges, total_cost = boruvka_mst(edges, num_vertices)
+
+print("Edges in the Minimum Spanning Tree:")
+for edge in mst_edges:
+    print(f"Edge: {edge[0]} - {edge[1]}, Cost: {edge[2]}")
+
+print("Total cost of the Minimum Spanning Tree:", total_cost)
