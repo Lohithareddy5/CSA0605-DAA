@@ -1,0 +1,35 @@
+def dijkstra(graph, source):
+    n = len(graph)
+    dist = [float('inf')] * n
+    dist[source] = 0
+    visited = [False] * n
+
+    for _ in range(n):
+        min_dist = float('inf')
+        u = -1
+        
+        for v in range(n):
+            if not visited[v] and dist[v] < min_dist:
+                min_dist = dist[v]
+                u = v
+
+        visited[u] = True
+
+        for v in range(n):
+            if graph[u][v] != float('inf') and not visited[v]:
+                if dist[u] + graph[u][v] < dist[v]:
+                    dist[v] = dist[u] + graph[u][v]
+
+    return dist
+
+# Test Case
+n = 5
+graph = [[0, 10, 3, float('inf'), float('inf')],
+         [float('inf'), 0, 1, 2, float('inf')],
+         [float('inf'), 4, 0, 8, 2],
+         [float('inf'), float('inf'), float('inf'), 0, 7],
+         [float('inf'), float('inf'), float('inf'), 9, 0]]
+source = 0
+
+output = dijkstra(graph, source)
+print(output)  # Output: [0, 7, 3, 9, 5]
